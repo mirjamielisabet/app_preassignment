@@ -10,3 +10,19 @@ let config = {
 };
 
 const connection = mysql.createPool(config);
+
+let connectionFunctions = {
+  close: () => {
+    return new Promise((resolve, reject) => {
+      connection.end((err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  },
+};
+
+module.exports = connectionFunctions;
