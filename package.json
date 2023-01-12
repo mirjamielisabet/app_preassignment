@@ -1,0 +1,23 @@
+{
+  "name": "app_preassignment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mirjamielisabet/app_preassignment.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mirjamielisabet/app_preassignment/issues"
+  },
+  "homepage": "https://github.com/mirjamielisabet/app_preassignment#readme",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
+}
