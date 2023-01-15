@@ -23,6 +23,18 @@ let connectionFunctions = {
       });
     });
   },
+
+  fetchAllJourneyData: () => {
+    return new Promise((resolve, reject) => {
+      connection.query("select * from journey_data", (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  },
 };
 
 module.exports = connectionFunctions;
