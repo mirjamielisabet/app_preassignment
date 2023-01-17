@@ -36,15 +36,31 @@ let connectionFunctions = {
     });
   },
 
-  fetchAllStationData: () => {
+  fetchAllStationNames: () => {
     return new Promise((resolve, reject) => {
-      connection.query("select * from stations", (err, data) => {
+      connection.query("select name, id from stations", (err, data) => {
         if (err) {
           reject(err);
         } else {
           resolve(data);
         }
       });
+    });
+  },
+
+  fetchStationData: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "select name, osoite, kapasiteetti from stations where id = ?",
+        id,
+        (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data);
+          }
+        }
+      );
     });
   },
 };
