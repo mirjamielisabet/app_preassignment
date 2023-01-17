@@ -1,17 +1,36 @@
 import React from "react";
 import { useEffect } from "react";
 import "../App.css";
-import StationDataTable from "./StationDataTable";
+import StationData from "./StationData";
+import StationList from "./StationList";
 
 const StationComponent = (props) => {
+  const [showStationInfo, setShowStationInfo] = React.useState(false);
+
   useEffect(() => {
-    props.getStationData();
+    props.getStationNames();
   }, [props]);
 
-  if (props.data[0].stationName === "-") {
+  const onClick = (id) => {
+    props.getStationData(id);
+    setShowStationInfo(true);
+  };
+
+  const backButtonClicked = () => {
+    setShowStationInfo(false);
+  };
+
+  if (props.stationNames[0].stationName === "-") {
     return <div className="loading">Loading...</div>;
+  } else if (showStationInfo === true) {
+    return (
+      <StationData
+        data={props.stationData}
+        backButtonClicked={backButtonClicked}
+      />
+    );
   }
-  return <StationDataTable data={props.data} />;
+  return <StationList data={props.stationNames} onClick={onClick} />;
 };
 
 export default StationComponent;
