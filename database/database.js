@@ -35,6 +35,18 @@ let connectionFunctions = {
       });
     });
   },
+
+  fetchAllStationData: () => {
+    return new Promise((resolve, reject) => {
+      connection.query("select * from stations", (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  },
 };
 
 module.exports = connectionFunctions;

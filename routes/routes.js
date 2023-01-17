@@ -11,4 +11,13 @@ router.get("/journey_data", async (req, res) => {
   }
 });
 
+router.get("/stations", async (req, res) => {
+  try {
+    let data = await connection.fetchAllStationData();
+    res.status(200).send(data);
+  } catch (err) {
+    res.status(404).send("Requested data not found");
+  }
+});
+
 module.exports = router;
