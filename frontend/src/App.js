@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import DataTable from "./components/Table";
+import JourneyDataTable from "./components/JourneyDataTable";
+import StationDataTable from "./components/StationDataTable";
 import axios from "axios";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 const App = () => {
-  const [data, setData] = useState([
+  const [journeyData, setJourneyData] = useState([
     {
       departureTime: "-",
       departureStation: "-",
@@ -14,10 +16,20 @@ const App = () => {
       distance: "-",
     },
   ]);
+  const [stationData, setStationData] = useState([
+    {
+      stationName: "-",
+      address: "-",
+      capacity: "-",
+      journeysStart: "-",
+      journeysEnd: "-",
+    },
+  ]);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     getJourneyData();
+    getStationData();
   }, []);
 
   const getJourneyData = () => {
@@ -36,7 +48,28 @@ const App = () => {
             distance: result.data[i].covered_distance,
           });
         }
-        setData(tempArr);
+        setJourneyData(tempArr);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getStationData = () => {
+    let tempArr = [];
+
+    axios
+      .get("http://localhost:8080/stations")
+      .then((result) => {
+        for (let i = 0; i < result.data.length; i++) {
+          tempArr.push({
+            stationName: result.data[i].name,
+            address: result.data[i].osoite,
+            capacity: result.data[i].kapasiteetti,
+          });
+        }
+        setStationData(tempArr);
         setLoading(false);
       })
       .catch((error) => {
@@ -48,9 +81,20 @@ const App = () => {
     return <div className="App">Loading...</div>;
   }
   return (
-    <div className="App">
-      <DataTable data={data} />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<JourneyDataTable data={journeyData} />} />
+        <Route
+          path="/stations"
+          element={
+            <StationDataTable
+              data={stationData}
+              getStationData={getStationData}
+            />
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
