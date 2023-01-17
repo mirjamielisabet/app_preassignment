@@ -160,11 +160,11 @@ function EnhancedTableToolbar() {
   );
 }
 
-const DataTable = (props) => {
+const JourneyDataTable = (props) => {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("departureTime");
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
+  const [dense, setDense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const rows = props.data;
@@ -252,4 +252,4 @@ const DataTable = (props) => {
   );
 };
 
-export default DataTable;
+export default JourneyDataTable;
