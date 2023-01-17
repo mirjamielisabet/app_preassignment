@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import NavigationBar from "./components/NavigationBar";
 import JourneyDataTable from "./components/JourneyDataTable";
 import StationDataTable from "./components/StationDataTable";
 import axios from "axios";
@@ -82,6 +83,7 @@ const App = () => {
   }
   return (
     <BrowserRouter>
+      <NavigationBar />
       <Routes>
         <Route path="/" element={<JourneyDataTable data={journeyData} />} />
         <Route
