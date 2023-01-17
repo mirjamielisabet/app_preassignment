@@ -13,7 +13,16 @@ router.get("/journey_data", async (req, res) => {
 
 router.get("/stations", async (req, res) => {
   try {
-    let data = await connection.fetchAllStationData();
+    let data = await connection.fetchAllStationNames();
+    res.status(200).send(data);
+  } catch (err) {
+    res.status(404).send("Requested data not found");
+  }
+});
+
+router.get("/stations/:id", async (req, res) => {
+  try {
+    let data = await connection.fetchStationData(req.params.id);
     res.status(200).send(data);
   } catch (err) {
     res.status(404).send("Requested data not found");
