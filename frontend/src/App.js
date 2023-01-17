@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import NavigationBar from "./components/NavigationBar";
-import JourneyDataTable from "./components/JourneyDataTable";
-import StationDataTable from "./components/StationDataTable";
+import JourneyComponent from "./components/JourneyComponent";
+import StationComponent from "./components/StationComponent";
 import axios from "axios";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 
@@ -22,15 +22,12 @@ const App = () => {
       stationName: "-",
       address: "-",
       capacity: "-",
-      journeysStart: "-",
-      journeysEnd: "-",
     },
   ]);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     getJourneyData();
-    getStationData();
   }, []);
 
   const getJourneyData = () => {
@@ -71,7 +68,6 @@ const App = () => {
           });
         }
         setStationData(tempArr);
-        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -79,17 +75,25 @@ const App = () => {
   };
 
   if (isLoading) {
-    return <div className="App">Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
   return (
     <BrowserRouter>
       <NavigationBar />
       <Routes>
-        <Route path="/" element={<JourneyDataTable data={journeyData} />} />
+        <Route
+          path="/"
+          element={
+            <JourneyComponent
+              data={journeyData}
+              getJourneyData={getJourneyData}
+            />
+          }
+        />
         <Route
           path="/stations"
           element={
-            <StationDataTable
+            <StationComponent
               data={stationData}
               getStationData={getStationData}
             />
