@@ -1,6 +1,6 @@
 import * as React from "react";
+import "../App.css";
 import PropTypes from "prop-types";
-import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -19,43 +19,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
-
-function createData(
-  departureTime,
-  departureStation,
-  returnTime,
-  returnStation,
-  duration,
-  distance
-) {
-  return {
-    departureTime,
-    departureStation,
-    returnTime,
-    returnStation,
-    duration,
-    distance,
-  };
-}
-
-const rows = [
-  createData(
-    "2021-05-31T23:57:25",
-    "Laajalahden aukio",
-    "2021-06-01T00:05:46",
-    "Teljäntie",
-    500,
-    2043
-  ),
-  createData(
-    "2021-05-31T23:56:59",
-    "Töölöntulli",
-    "2021-06-01T00:07:14",
-    "Pasilan asema",
-    611,
-    1870
-  ),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -139,6 +102,9 @@ function EnhancedTableHead(props) {
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
+            style={{
+              fontWeight: "bold",
+            }}
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
@@ -164,49 +130,27 @@ function EnhancedTableHead(props) {
 }
 
 EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
 };
 
-function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
-
+function EnhancedTableToolbar() {
   return (
     <Toolbar
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
-        }),
       }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Helsinki City Bike Journeys
-        </Typography>
-      )}
+      <Typography
+        sx={{ flex: "1 1 100%" }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        Helsinki City Bike Journeys
+      </Typography>
       <Tooltip title="Filter list">
         <IconButton>
           <FilterListIcon />
@@ -216,16 +160,15 @@ function EnhancedTableToolbar(props) {
   );
 }
 
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
-
-export default function DataTable() {
+const DataTable = (props) => {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("departureTime");
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  console.log(props.data);
+
+  const rows = props.data;
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -251,7 +194,7 @@ export default function DataTable() {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box className="dataTable">
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar />
         <TableContainer>
@@ -293,7 +236,7 @@ export default function DataTable() {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 25, 50, 75]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
@@ -308,4 +251,6 @@ export default function DataTable() {
       />
     </Box>
   );
-}
+};
+
+export default DataTable;
