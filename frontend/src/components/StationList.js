@@ -4,11 +4,14 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import TablePagination from "@mui/material/TablePagination";
-import { Divider } from "@mui/material";
+import { Divider, IconButton, TextField } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const StationList = (props) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [search, setSearch] = React.useState("");
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -20,8 +23,26 @@ const StationList = (props) => {
   };
 
   const handleListItemClick = (event, index) => {
-    event.preventDefault();
     props.onClick(index);
+  };
+
+  const handleChange = (event) => {
+    const value = event.target.value;
+    setSearch(value);
+  };
+
+  const clearText = (event) => {
+    setSearch("");
+  };
+
+  const filterBy = (rows) => {
+    if (search === "") {
+      return rows;
+    }
+
+    return rows.filter((value) =>
+      value.stationName.toLowerCase().includes(search.toLowerCase())
+    );
   };
 
   return (
@@ -29,8 +50,24 @@ const StationList = (props) => {
       className="dataTable"
       sx={{ width: "100%", maxWidth: 500, bgcolor: "background.paper" }}
     >
+      <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+        <SearchIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
+        <TextField
+          label="Search"
+          variant="standard"
+          onChange={handleChange}
+          value={search}
+          fullWidth
+        />
+        {search !== "" && (
+          <IconButton onClick={clearText}>
+            <ClearIcon />
+          </IconButton>
+        )}
+      </Box>
+
       <List component="nav" aria-label="stationList">
-        {props.data
+        {filterBy(props.data)
           .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
           .map((data, index) => {
             return (
@@ -47,7 +84,7 @@ const StationList = (props) => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={props.data.length}
+        count={filterBy(props.data).length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
