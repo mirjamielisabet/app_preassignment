@@ -29,6 +29,7 @@ const StationList = (props) => {
   const handleChange = (event) => {
     const value = event.target.value;
     setSearch(value);
+    setPage(0);
   };
 
   const clearText = (event) => {

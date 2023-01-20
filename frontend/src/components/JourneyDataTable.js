@@ -152,6 +152,7 @@ const EnhancedTableToolbar = (props) => {
       ...text,
       [name]: value,
     });
+    props.setPage(0);
   };
 
   const clearText = (event) => {
@@ -362,6 +363,7 @@ const JourneyDataTable = (props) => {
           showFilterOptions={showFilterOptions}
           handleFilterClick={handleFilterClick}
           handleChangeFilter={handleChangeFilter}
+          setPage={setPage}
         />
         <TableContainer>
           <Table
