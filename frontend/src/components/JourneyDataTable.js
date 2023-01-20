@@ -19,6 +19,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
+import { Button, Divider, TextField } from "@mui/material";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import Stack from "@mui/material/Stack";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -135,7 +138,31 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
 };
 
-function EnhancedTableToolbar() {
+const EnhancedTableToolbar = (props) => {
+  const [text, setText] = React.useState({
+    departureStation: "",
+    returnStation: "",
+  });
+
+  const handleChange = (event) => {
+    const value = event.target.value;
+    const name = event.target.name;
+    setText({ ...text, [name]: value });
+    props.handleChangeFilter({
+      ...text,
+      [name]: value,
+    });
+  };
+
+  const clearText = (event) => {
+    const name = event.target.name;
+    setText({ ...text, [name]: "" });
+    props.handleChangeFilter({
+      ...text,
+      [name]: "",
+    });
+  };
+
   return (
     <Toolbar
       sx={{
@@ -151,14 +178,103 @@ function EnhancedTableToolbar() {
       >
         Helsinki City Bike Journeys
       </Typography>
-      <Tooltip title="Filter list">
-        <IconButton>
-          <FilterListIcon />
+      {props.showFilterOptions ? (
+        <Paper
+          sx={{
+            width: "800px",
+            margin: 1,
+          }}
+        >
+          <Stack
+            direction="row"
+            spacing={1.5}
+            justifyContent="center"
+            alignItems="center"
+            paddingTop={1}
+            paddingLeft={1.5}
+            paddingRight={1.5}
+          >
+            <FilterListIcon
+              sx={{
+                fontSize: 20,
+              }}
+            />
+            <Typography variant="body2" width={250} textAlign={"left"}>
+              Departure Station
+            </Typography>
+            <TextField
+              sx={{
+                paddingBottom: 2,
+              }}
+              variant="standard"
+              label="Search"
+              name="departureStation"
+              size="small"
+              value={text.departureStation}
+              onChange={handleChange}
+              fullWidth
+            />
+            <Button
+              variant="outlined"
+              size="small"
+              name="departureStation"
+              onClick={clearText}
+            >
+              Clear
+            </Button>
+          </Stack>
+          <Divider />
+          <Stack
+            direction="row"
+            spacing={1.5}
+            justifyContent="center"
+            alignItems="center"
+            paddingTop={1}
+            paddingLeft={1.5}
+            paddingRight={1.5}
+          >
+            <FilterListIcon
+              sx={{
+                fontSize: 20,
+              }}
+            />
+            <Typography variant="body2" width={250} textAlign={"left"}>
+              Return Station
+            </Typography>
+            <TextField
+              sx={{
+                paddingBottom: 2,
+              }}
+              variant="standard"
+              label="Search"
+              size="small"
+              name="returnStation"
+              value={text.returnStation}
+              onChange={handleChange}
+              fullWidth
+            />
+            <Button
+              variant="outlined"
+              size="small"
+              name="returnStation"
+              onClick={clearText}
+            >
+              Clear
+            </Button>
+          </Stack>
+          <Divider />
+        </Paper>
+      ) : (
+        ""
+      )}
+      <Tooltip title={props.showFilterOptions ? "Close" : "Filter"}>
+        <IconButton onClick={props.handleFilterClick}>
+          {props.showFilterOptions ? <HighlightOffIcon /> : <FilterListIcon />}
         </IconButton>
       </Tooltip>
     </Toolbar>
   );
-}
+};
 
 const JourneyDataTable = (props) => {
   const [order, setOrder] = React.useState("asc");
@@ -166,6 +282,11 @@ const JourneyDataTable = (props) => {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(true);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [showFilterOptions, setShowFilterOptions] = React.useState(false);
+  const [filter, setFilter] = React.useState({
+    departureStation: "",
+    returnStation: "",
+  });
 
   const rows = props.data;
 
@@ -188,14 +309,60 @@ const JourneyDataTable = (props) => {
     setDense(event.target.checked);
   };
 
+  const handleFilterClick = () => {
+    showFilterOptions
+      ? setShowFilterOptions(false)
+      : setShowFilterOptions(true);
+  };
+
+  const handleChangeFilter = (value) => {
+    setFilter(value);
+  };
+
+  const filterBy = (rows) => {
+    if (filter.departureStation === "" && filter.returnStation === "") {
+      return rows;
+    }
+
+    if (filter.returnStation !== "" && filter.departureStation !== "") {
+      return rows.filter(
+        (value) =>
+          value.departureStation
+            .toLowerCase()
+            .includes(filter.departureStation.toLowerCase()) &&
+          value.returnStation
+            .toLowerCase()
+            .includes(filter.returnStation.toLowerCase())
+      );
+    } else if (filter.departureStation === "") {
+      return rows.filter((value) =>
+        value.returnStation
+          .toLowerCase()
+          .includes(filter.returnStation.toLowerCase())
+      );
+    } else {
+      return rows.filter((value) =>
+        value.departureStation
+          .toLowerCase()
+          .includes(filter.departureStation.toLowerCase())
+      );
+    }
+  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - filterBy(rows).length)
+      : 0;
 
   return (
     <Box className="dataTable">
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar />
+        <EnhancedTableToolbar
+          showFilterOptions={showFilterOptions}
+          handleFilterClick={handleFilterClick}
+          handleChangeFilter={handleChangeFilter}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -208,11 +375,11 @@ const JourneyDataTable = (props) => {
               onRequestSort={handleRequestSort}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(filterBy(rows), getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (
-                    <TableRow hover tabIndex={-1} key={row.name}>
+                    <TableRow hover tabIndex={-1} key={row.id}>
                       <TableCell>{row.departureTime}</TableCell>
                       <TableCell>{row.departureStation}</TableCell>
                       <TableCell>{row.returnTime}</TableCell>
@@ -237,7 +404,7 @@ const JourneyDataTable = (props) => {
         <TablePagination
           rowsPerPageOptions={[10, 25, 50, 75]}
           component="div"
-          count={rows.length}
+          count={filterBy(rows).length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
