@@ -84,13 +84,13 @@ const headCells = [
     id: "duration",
     numeric: true,
     disablePadding: false,
-    label: "Duration (sec.)",
+    label: "Duration (min)",
   },
   {
     id: "distance",
     numeric: true,
     disablePadding: false,
-    label: "Distance (m)",
+    label: "Distance (km)",
   },
 ];
 
@@ -291,6 +291,18 @@ const JourneyDataTable = (props) => {
 
   const rows = props.data;
 
+  const formatDate = (dateString) => {
+    let date = new Date(dateString);
+    let dt = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let hours = date.getHours();
+    let minutes = (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
+
+    let newDateString = `${dt}.${month}.${year} ${hours}:${minutes}`;
+    return newDateString;
+  };
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -382,12 +394,16 @@ const JourneyDataTable = (props) => {
                 .map((row) => {
                   return (
                     <TableRow hover tabIndex={-1} key={row.id}>
-                      <TableCell>{row.departureTime}</TableCell>
+                      <TableCell>{formatDate(row.departureTime)}</TableCell>
                       <TableCell>{row.departureStation}</TableCell>
-                      <TableCell>{row.returnTime}</TableCell>
+                      <TableCell>{formatDate(row.returnTime)}</TableCell>
                       <TableCell>{row.returnStation}</TableCell>
-                      <TableCell align="right">{row.duration}</TableCell>
-                      <TableCell align="right">{row.distance}</TableCell>
+                      <TableCell align="right">
+                        {Math.round((row.duration / 60) * 10) / 10}
+                      </TableCell>
+                      <TableCell align="right">
+                        {Math.round((row.distance / 1000) * 100) / 100}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
