@@ -9,21 +9,26 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 const App = () => {
   const [journeyData, setJourneyData] = useState([
     {
+      id: 0,
       departureTime: "-",
       departureStation: "-",
       returnTime: "-",
       returnStation: "-",
-      duration: "-",
-      distance: "-",
+      duration: 0,
+      distance: 0,
     },
   ]);
-  const [stationData, setStationData] = useState([
+  const [stationNames, setStationNames] = useState([
     {
+      id: 0,
       stationName: "-",
-      address: "-",
-      capacity: "-",
     },
   ]);
+  const [stationData, setStationData] = useState({
+    stationName: "-",
+    address: "-",
+    capacity: 0,
+  });
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,6 +43,7 @@ const App = () => {
       .then((result) => {
         for (let i = 0; i < result.data.length; i++) {
           tempArr.push({
+            id: result.data[i].id,
             departureTime: result.data[i].departure_date,
             departureStation: result.data[i].departure_station_name,
             returnTime: result.data[i].return_date,
@@ -54,7 +60,7 @@ const App = () => {
       });
   };
 
-  const getStationData = () => {
+  const getStationNames = () => {
     let tempArr = [];
 
     axios
@@ -62,12 +68,26 @@ const App = () => {
       .then((result) => {
         for (let i = 0; i < result.data.length; i++) {
           tempArr.push({
+            id: result.data[i].id,
             stationName: result.data[i].name,
-            address: result.data[i].osoite,
-            capacity: result.data[i].kapasiteetti,
           });
         }
-        setStationData(tempArr);
+        setStationNames(tempArr);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getStationData = (id) => {
+    axios
+      .get(`http://localhost:8080/stations/${id}`)
+      .then((result) => {
+        setStationData({
+          stationName: result.data[0].name,
+          address: result.data[0].osoite,
+          capacity: result.data[0].kapasiteetti,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -94,7 +114,9 @@ const App = () => {
           path="/stations"
           element={
             <StationComponent
-              data={stationData}
+              stationData={stationData}
+              stationNames={stationNames}
+              getStationNames={getStationNames}
               getStationData={getStationData}
             />
           }
