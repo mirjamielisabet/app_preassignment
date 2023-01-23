@@ -63,6 +63,38 @@ let connectionFunctions = {
       );
     });
   },
+
+  fetchJourneyStartCount: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "select count(*) as startCount from journey_data where departure_station_id = ?",
+        id,
+        (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data);
+          }
+        }
+      );
+    });
+  },
+
+  fetchJourneyEndCount: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        "select count(*) as endCount from journey_data where return_station_id = ?",
+        id,
+        (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(data);
+          }
+        }
+      );
+    });
+  },
 };
 
 module.exports = connectionFunctions;
