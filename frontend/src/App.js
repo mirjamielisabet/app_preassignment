@@ -29,6 +29,8 @@ const App = () => {
     address: "-",
     capacity: 0,
   });
+  const [startJourneyCount, setStartJourneyCount] = useState(0);
+  const [endJourneyCount, setEndJourneyCount] = useState(0);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -94,6 +96,28 @@ const App = () => {
       });
   };
 
+  const getStartJourneys = (id) => {
+    axios
+      .get(`http://localhost:8080/journey_data/start/${id}`)
+      .then((result) => {
+        setStartJourneyCount(result.data[0].startCount);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getEndJourneys = (id) => {
+    axios
+      .get(`http://localhost:8080/journey_data/end/${id}`)
+      .then((result) => {
+        setEndJourneyCount(result.data[0].endCount);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   if (isLoading) {
     return <div className="loading">Loading...</div>;
   }
@@ -118,6 +142,10 @@ const App = () => {
               stationNames={stationNames}
               getStationNames={getStationNames}
               getStationData={getStationData}
+              getStartJourneys={getStartJourneys}
+              getEndJourneys={getEndJourneys}
+              startJourneyCount={startJourneyCount}
+              endJourneyCount={endJourneyCount}
             />
           }
         />
