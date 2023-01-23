@@ -29,4 +29,22 @@ router.get("/stations/:id", async (req, res) => {
   }
 });
 
+router.get("/journey_data/start/:id", async (req, res) => {
+  try {
+    let data = await connection.fetchJourneyStartCount(req.params.id);
+    res.status(200).send(data);
+  } catch (err) {
+    res.status(404).send("Requested data not found");
+  }
+});
+
+router.get("/journey_data/end/:id", async (req, res) => {
+  try {
+    let data = await connection.fetchJourneyEndCount(req.params.id);
+    res.status(200).send(data);
+  } catch (err) {
+    res.status(404).send("Requested data not found");
+  }
+});
+
 module.exports = router;
