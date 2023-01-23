@@ -13,10 +13,12 @@ const StationComponent = (props) => {
 
   const onClick = (id) => {
     props.getStationData(id);
+    props.getStartJourneys(id);
+    props.getEndJourneys(id);
     setShowStationInfo(true);
   };
 
-  const backButtonClicked = () => {
+  const closeButtonClicked = () => {
     setShowStationInfo(false);
   };
 
@@ -26,7 +28,9 @@ const StationComponent = (props) => {
     return (
       <StationData
         data={props.stationData}
-        backButtonClicked={backButtonClicked}
+        closeButtonClicked={closeButtonClicked}
+        startJourneyCount={props.startJourneyCount}
+        endJourneyCount={props.endJourneyCount}
       />
     );
   }
