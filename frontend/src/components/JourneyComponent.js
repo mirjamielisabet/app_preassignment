@@ -6,23 +6,23 @@ import JourneyDataTable from "./JourneyDataTable";
 const JourneyComponent = () => {
   const [journeyData, setJourneyData] = React.useState([
     {
-      id: 0,
-      departureTime: "-",
-      departureStation: "-",
-      returnTime: "-",
-      returnStation: "-",
-      duration: 0,
-      distance: 0,
+      id: "",
+      departureTime: "",
+      departureStation: "",
+      returnTime: "",
+      returnStation: "",
+      duration: "",
+      distance: "",
     },
   ]);
   const [isLoading, setLoading] = React.useState(true);
+  const [errorMsg, setErrorMsg] = React.useState("");
 
   React.useEffect(() => {
     getJourneyData();
   }, []);
 
   const getJourneyData = () => {
-    setLoading(true);
     let tempArr = [];
 
     axios
@@ -43,13 +43,15 @@ const JourneyComponent = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        setErrorMsg(error.response.status + " " + error.response.data);
         setLoading(false);
       });
   };
 
   if (isLoading) {
     return <div className="loading">Loading...</div>;
+  } else if (errorMsg !== "") {
+    return <div className="errormsg">{errorMsg}</div>;
   }
   return <JourneyDataTable data={journeyData} />;
 };
