@@ -1,29 +1,61 @@
 import React from "react";
 import "../App.css";
-import Button from "@mui/material/Button";
-import { Paper } from "@mui/material";
+import { Divider, Paper, Typography, Stack, Button } from "@mui/material";
 
 const StationData = (props) => {
-  if (props.data.stationName === "-") {
-    return <div className="loading">Loading...</div>;
-  }
   return (
-    <div className="dataTable">
+    <div className="stationData">
       <Paper
         sx={{
           padding: 5,
-          width: "50%",
         }}
       >
-        <h1>{props.data.stationName}</h1>
+        <Typography sx={{ paddingBottom: 3 }} variant="h4">
+          {props.data.stationName}
+        </Typography>
 
-        <p>Address: {props.data.address}</p>
-        <p>Capacity: {props.data.capacity}</p>
-        <p>
-          Number of Journeys Starting from the Station:{" "}
-          {props.startJourneyCount}
-        </p>
-        <p>Number of Journeys Ending at the Station: {props.endJourneyCount}</p>
+        <Stack
+          direction="row"
+          justifyContent={"space-between"}
+          sx={{ paddingBottom: 0.5 }}
+        >
+          <Typography>Address:</Typography>
+          <Typography>{props.data.address}</Typography>
+        </Stack>
+
+        <Divider />
+
+        <Stack
+          direction="row"
+          justifyContent={"space-between"}
+          sx={{ paddingBottom: 0.5, paddingTop: 0.5 }}
+        >
+          <Typography>Capacity:</Typography>
+          <Typography>{props.data.capacity}</Typography>
+        </Stack>
+
+        <Divider />
+
+        <Stack
+          direction="row"
+          justifyContent={"space-between"}
+          sx={{ paddingBottom: 0.5, paddingTop: 0.5 }}
+        >
+          <Typography>Number of Journeys Starting from the Station:</Typography>
+          <Typography>{props.startJourneyCount}</Typography>
+        </Stack>
+
+        <Divider />
+
+        <Stack
+          direction="row"
+          justifyContent={"space-between"}
+          sx={{ paddingTop: 0.5 }}
+        >
+          <Typography>Number of Journeys Ending at the Station:</Typography>
+          <Typography>{props.endJourneyCount}</Typography>
+        </Stack>
+
         <br />
         <Button variant="outlined" onClick={props.closeButtonClicked}>
           Close
