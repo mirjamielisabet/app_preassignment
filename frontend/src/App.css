@@ -1,38 +1,66 @@
-.App {
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #e7ebf0;
+  margin: 4%;
+  margin-left: 5%;
+  margin-right: 5%;
   text-align: center;
+  line-height: 1.6;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.stationContainer {
+  margin-left: 25%;
+  margin-right: 25%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.dataList {
+  padding: 1.5em;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.stationData {
+  text-align: left;
+}
+
+.loading {
+  padding: 2em;
+  font-size: 1.3em;
+}
+
+.noresults {
+  font-style: italic;
+  padding-top: 1em;
+  font-size: 0.9em;
+}
+
+.errormsg {
+  padding: 2em;
+  font-size: 1.2em;
+}
+
+.links ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-bottom: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+.links a {
+  padding: 12px;
+  margin: 5px;
+  border-radius: 0.2em;
+  text-decoration: none;
+  font-size: 1em;
+  color: black;
+  background-color: #fffffe;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.links a:hover {
+  background-color: #e7ebf0;
+  text-decoration: underline #5b80a8;
+  text-underline-position: under;
 }
