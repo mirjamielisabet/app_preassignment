@@ -1,10 +1,15 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import TablePagination from "@mui/material/TablePagination";
-import { Divider, IconButton, TextField } from "@mui/material";
+import {
+  Divider,
+  IconButton,
+  TextField,
+  Box,
+  List,
+  ListItemButton,
+  ListItemText,
+  TablePagination,
+  Paper,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -47,10 +52,7 @@ const StationList = (props) => {
   };
 
   return (
-    <Box
-      className="dataTable"
-      sx={{ width: "100%", maxWidth: 500, bgcolor: "background.paper" }}
-    >
+    <Paper className="dataList">
       <Box sx={{ display: "flex", alignItems: "flex-end" }}>
         <SearchIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
         <TextField
@@ -80,6 +82,9 @@ const StationList = (props) => {
               </ListItemButton>
             );
           })}
+        {filterBy(props.data).length === 0 && (
+          <div className="noresults">No results found</div>
+        )}
       </List>
       <Divider />
       <TablePagination
@@ -91,7 +96,7 @@ const StationList = (props) => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-    </Box>
+    </Paper>
   );
 };
 
