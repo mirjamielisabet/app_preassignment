@@ -7,19 +7,20 @@ import StationList from "./StationList";
 const StationComponent = () => {
   const [stationNames, setStationNames] = React.useState([
     {
-      id: 0,
-      stationName: "-",
+      id: "",
+      stationName: "",
     },
   ]);
   const [stationData, setStationData] = React.useState({
-    stationName: "-",
-    address: "-",
-    capacity: 0,
+    stationName: "",
+    address: "",
+    capacity: "",
   });
   const [startJourneyCount, setStartJourneyCount] = React.useState(0);
   const [endJourneyCount, setEndJourneyCount] = React.useState(0);
   const [showStationInfo, setShowStationInfo] = React.useState(false);
   const [isLoading, setLoading] = React.useState(true);
+  const [errorMsg, setErrorMsg] = React.useState("");
 
   const getStationNames = () => {
     setLoading(true);
@@ -38,7 +39,7 @@ const StationComponent = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        setErrorMsg(error.response.status + " " + error.response.data);
         setLoading(false);
       });
   };
@@ -56,7 +57,7 @@ const StationComponent = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        setErrorMsg(error.response.status + " " + error.response.data);
         setLoading(false);
       });
   };
@@ -68,7 +69,7 @@ const StationComponent = () => {
         setStartJourneyCount(result.data[0].startCount);
       })
       .catch((error) => {
-        console.log(error);
+        setErrorMsg(error.response.status + " " + error.response.data);
       });
   };
 
@@ -79,7 +80,7 @@ const StationComponent = () => {
         setEndJourneyCount(result.data[0].endCount);
       })
       .catch((error) => {
-        console.log(error);
+        setErrorMsg(error.response.status + " " + error.response.data);
       });
   };
 
@@ -100,17 +101,23 @@ const StationComponent = () => {
 
   if (isLoading) {
     return <div className="loading">Loading...</div>;
-  } else if (showStationInfo === true) {
-    return (
-      <StationData
-        data={stationData}
-        closeButtonClicked={closeButtonClicked}
-        startJourneyCount={startJourneyCount}
-        endJourneyCount={endJourneyCount}
-      />
-    );
+  } else if (errorMsg !== "") {
+    return <div className="errormsg">{errorMsg}</div>;
   }
-  return <StationList data={stationNames} onClick={onClick} />;
+  return (
+    <div>
+      {showStationInfo ? (
+        <StationData
+          data={stationData}
+          closeButtonClicked={closeButtonClicked}
+          startJourneyCount={startJourneyCount}
+          endJourneyCount={endJourneyCount}
+        />
+      ) : (
+        <StationList data={stationNames} onClick={onClick} />
+      )}
+    </div>
+  );
 };
 
 export default StationComponent;
