@@ -9,6 +9,7 @@ import {
   ListItemText,
   TablePagination,
   Paper,
+  Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -53,6 +54,9 @@ const StationList = (props) => {
 
   return (
     <Paper className="dataList">
+      <Typography variant="h6" sx={{ paddingBottom: 2 }}>
+        Helsinki City Bike Stations
+      </Typography>
       <Box sx={{ display: "flex", alignItems: "flex-end" }}>
         <SearchIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />
         <TextField
