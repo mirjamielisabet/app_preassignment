@@ -2,6 +2,7 @@ import React from "react";
 import "../App.css";
 import axios from "axios";
 import JourneyDataTable from "./JourneyDataTable";
+import CopyrightIcon from "@mui/icons-material/Copyright";
 
 const JourneyComponent = () => {
   const [journeyData, setJourneyData] = React.useState([
@@ -53,7 +54,18 @@ const JourneyComponent = () => {
   } else if (errorMsg !== "") {
     return <div className="errormsg">{errorMsg}</div>;
   }
-  return <JourneyDataTable data={journeyData} />;
+  return (
+    <div>
+      <JourneyDataTable data={journeyData} />
+      <p className="footerText">
+        Journey data{" "}
+        <CopyrightIcon
+          style={{ fontSize: "1em", position: "relative", top: "2.5px" }}
+        />{" "}
+        City Bike Finland
+      </p>
+    </div>
+  );
 };
 
 export default JourneyComponent;

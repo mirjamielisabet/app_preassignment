@@ -3,6 +3,7 @@ import "../App.css";
 import axios from "axios";
 import StationData from "./StationData";
 import StationList from "./StationList";
+import CopyrightIcon from "@mui/icons-material/Copyright";
 
 const StationComponent = () => {
   const [stationNames, setStationNames] = React.useState([
@@ -23,7 +24,6 @@ const StationComponent = () => {
   const [errorMsg, setErrorMsg] = React.useState("");
 
   const getStationNames = () => {
-    setLoading(true);
     let tempArr = [];
 
     axios
@@ -105,7 +105,7 @@ const StationComponent = () => {
     return <div className="errormsg">{errorMsg}</div>;
   }
   return (
-    <div>
+    <div className="stationContainer">
       {showStationInfo ? (
         <StationData
           data={stationData}
@@ -116,6 +116,16 @@ const StationComponent = () => {
       ) : (
         <StationList data={stationNames} onClick={onClick} />
       )}
+      <br />
+      <p className="footerText">
+        Helsinki Region Transport’s (HSL) city bicycle stations data{" "}
+        <CopyrightIcon
+          style={{ fontSize: "1em", position: "relative", top: "2.5px" }}
+        />{" "}
+        <a href="https://www.avoindata.fi/data/en_GB/dataset/hsl-n-kaupunkipyoraasemat">
+          Helsingin seudun liikenne (HSL)
+        </a>
+      </p>
     </div>
   );
 };
