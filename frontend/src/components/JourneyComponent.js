@@ -55,7 +55,7 @@ const JourneyComponent = () => {
     return <div className="errormsg">{errorMsg}</div>;
   }
   return (
-    <div>
+    <div className="journeyContainer">
       <JourneyDataTable data={journeyData} />
       <p className="footerText">
         Journey data{" "}

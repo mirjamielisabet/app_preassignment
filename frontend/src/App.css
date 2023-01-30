@@ -5,15 +5,18 @@
 body {
   background-color: #e7ebf0;
   margin: 4%;
-  margin-left: 5%;
-  margin-right: 5%;
   text-align: center;
   line-height: 1.6;
 }
 
 .stationContainer {
-  margin-left: 25%;
-  margin-right: 25%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.journeyContainer {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .dataList {
@@ -63,4 +66,12 @@ body {
   background-color: #e7ebf0;
   text-decoration: underline #5b80a8;
   text-underline-position: under;
+}
+
+.footerText {
+  font-size: 0.8em;
+}
+
+.footerText a {
+  color: black;
 }
