@@ -5,6 +5,11 @@ import StationData from "./StationData";
 import StationList from "./StationList";
 import CopyrightIcon from "@mui/icons-material/Copyright";
 
+/**
+ * A component containing the city bike station view of the Application.
+ *
+ * @returns the view of the city bike stations
+ */
 const StationComponent = () => {
   const [stationNames, setStationNames] = React.useState([
     {
@@ -23,6 +28,10 @@ const StationComponent = () => {
   const [isLoading, setLoading] = React.useState(true);
   const [errorMsg, setErrorMsg] = React.useState("");
 
+  /**
+   * Retrieves the station names and ids by using Axios.
+   * Saves the data to the state.
+   */
   const getStationNames = () => {
     let tempArr = [];
 
@@ -44,6 +53,11 @@ const StationComponent = () => {
       });
   };
 
+  /**
+   * Retrieves information about a single station based on a station id.
+   * The data is saved to the state.
+   * @param {number} id - The id of the station
+   */
   const getStationData = (id) => {
     setLoading(true);
     axios
@@ -62,6 +76,11 @@ const StationComponent = () => {
       });
   };
 
+  /**
+   * Retrieves the count of the starting journeys based on a station id.
+   * The count is saved to the state.
+   * @param {number} id - The id of the station
+   */
   const getStartJourneys = (id) => {
     axios
       .get(`http://localhost:8080/journey_data/start/${id}`)
@@ -73,6 +92,11 @@ const StationComponent = () => {
       });
   };
 
+  /**
+   * Retrieves the count of the ending journeys based on a station id.
+   * The count is saved to the state.
+   * @param {number} id - The id of the station
+   */
   const getEndJourneys = (id) => {
     axios
       .get(`http://localhost:8080/journey_data/end/${id}`)
@@ -84,10 +108,20 @@ const StationComponent = () => {
       });
   };
 
+  /**
+   * Calls getStationNames function after the first render.
+   */
   React.useEffect(() => {
     getStationNames();
   }, []);
 
+  /**
+   * Handles a click of a station list item.
+   *
+   * By setting showStationInfo to true, shows the single station info view.
+   * The id of the clicked station name is passed on to the data retrieving functions.
+   * @param {number} id - The id of the station
+   */
   const onClick = (id) => {
     getStationData(id);
     getStartJourneys(id);
@@ -95,6 +129,11 @@ const StationComponent = () => {
     setShowStationInfo(true);
   };
 
+  /**
+   * Handles a click of a close button.
+   *
+   * Hides single station info view and shows station list by setting showStationInfo to false.
+   */
   const closeButtonClicked = () => {
     setShowStationInfo(false);
   };

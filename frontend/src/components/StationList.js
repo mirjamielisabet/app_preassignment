@@ -14,34 +14,72 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 
+/**
+ * A component containing a list of city bike stations.
+ * @param {Object} props
+ * @param {Array} props.data - City bike station names and ids
+ * @param {Function} props.onClick - Function for handling a list item click
+ * @returns The list of the city bike stations
+ */
 const StationList = (props) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [search, setSearch] = React.useState("");
 
+  /**
+   * Handles the page change.
+   * @param {Object} event
+   * @param {number} newPage - the number of the new page
+   */
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
+  /**
+   * Handles the change of rows per page.
+   * Sets the page to be the first page.
+   * @param {Object} event
+   */
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  /**
+   * Handles a click of the list item.
+   * @param {Object} event
+   * @param {number} index - The index (id) of the clicked list item
+   */
   const handleListItemClick = (event, index) => {
     props.onClick(index);
   };
 
+  /**
+   * Handles the change in the search field and saves the input value to the state.
+   * Sets the page to be the first page.
+   * @param {Object} event
+   */
   const handleChange = (event) => {
     const value = event.target.value;
     setSearch(value);
     setPage(0);
   };
 
+  /**
+   * Clears the content of the search field.
+   * Sets the page to be the first page.
+   * @param {Object} event
+   */
   const clearText = (event) => {
     setSearch("");
+    setPage(0);
   };
 
+  /**
+   * Filters the rows by the input of the search field.
+   * @param {Array} rows - The rows to be filtered
+   * @returns filtered rows
+   */
   const filterBy = (rows) => {
     if (search === "") {
       return rows;

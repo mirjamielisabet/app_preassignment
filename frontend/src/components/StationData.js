@@ -2,6 +2,15 @@ import React from "react";
 import "../App.css";
 import { Divider, Paper, Typography, Stack, Button } from "@mui/material";
 
+/**
+ * A component for displaying information about a single city bike station.
+ * @param {Object} props
+ * @param {Object} props.data - Information about a station
+ * @param {Function} props.closeButtonClicked - Function for handling the click of the close button
+ * @param {number} props.startJourneyCount - The count of the starting journeys
+ * @param {number} props.endJourneyCount - The count of the ending journeys
+ * @returns A single station view component
+ */
 const StationData = (props) => {
   return (
     <div className="stationData">

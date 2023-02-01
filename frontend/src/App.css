@@ -1,7 +1,11 @@
+/* Defines that padding and border are included in the
+width and height of an element. */
 * {
   box-sizing: border-box;
 }
 
+/* Sets the background color for the page.
+Centers the text, sets line height and adds margin. */
 body {
   background-color: #e7ebf0;
   margin: 4%;
@@ -9,40 +13,51 @@ body {
   line-height: 1.6;
 }
 
+/* Properties for the component that acts as a container for the station data:
+Sets max width and centers the container. */
 .stationContainer {
   max-width: 600px;
   margin: 0 auto;
 }
 
+/* Properties for the component that acts as a container for the journey data:
+Sets max width and centers the container. */
 .journeyContainer {
   max-width: 1200px;
   margin: 0 auto;
 }
 
+/* Adds padding for the station list. */
 .dataList {
   padding: 1.5em;
 }
 
+/* Aligns single station data view's text to the left. */
 .stationData {
   text-align: left;
 }
 
+/* Adds padding and sets font size for the 'Loading...' -text. */
 .loading {
   padding: 2em;
   font-size: 1.3em;
 }
 
+/* Adds padding and sets font style and size for the 'No results found' -text. */
 .noresults {
   font-style: italic;
   padding-top: 1em;
   font-size: 0.9em;
 }
 
+/* Adds padding and sets font size for the error messages. */
 .errormsg {
   padding: 2em;
   font-size: 1.2em;
 }
 
+/* Properties for the navigation bar's unordered list: Removes list item marker,
+padding and margin and by using flex centers the list items. Adds margin to the bottom. */
 .links ul {
   list-style-type: none;
   padding: 0;
@@ -52,6 +67,8 @@ body {
   margin-bottom: 20px;
 }
 
+/* Sets properties for the links in navbar: adds padding and margin, removes
+text decoration, adds background color and text color, sets font size and border radius. */
 .links a {
   padding: 12px;
   margin: 5px;
@@ -62,16 +79,19 @@ body {
   background-color: #fffffe;
 }
 
+/* Links in navbar on hover: changes background color and text decoration. */
 .links a:hover {
   background-color: #e7ebf0;
   text-decoration: underline #5b80a8;
   text-underline-position: under;
 }
 
+/* Sets the font size of the footer text. */
 .footerText {
   font-size: 0.8em;
 }
 
+/* Sets the font color of the footer text link. */
 .footerText a {
   color: black;
 }

@@ -4,6 +4,11 @@ import axios from "axios";
 import JourneyDataTable from "./JourneyDataTable";
 import CopyrightIcon from "@mui/icons-material/Copyright";
 
+/**
+ * A component containing the city bike journey view of the Application.
+ *
+ * @returns the view of the city bike journeys
+ */
 const JourneyComponent = () => {
   const [journeyData, setJourneyData] = React.useState([
     {
@@ -19,10 +24,17 @@ const JourneyComponent = () => {
   const [isLoading, setLoading] = React.useState(true);
   const [errorMsg, setErrorMsg] = React.useState("");
 
+  /**
+   * Calls getJourneyData function after the first render.
+   */
   React.useEffect(() => {
     getJourneyData();
   }, []);
 
+  /**
+   * Retrieves the journey data by using Axios.
+   * The data is saved to the state.
+   */
   const getJourneyData = () => {
     let tempArr = [];
 

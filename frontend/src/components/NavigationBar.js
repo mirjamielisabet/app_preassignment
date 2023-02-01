@@ -2,6 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../App.css";
 
+/**
+ * Returns links that let the user navigate between views.
+ * @returns the navigation bar component
+ */
 const NavigationBar = () => {
   return (
     <div className="links">

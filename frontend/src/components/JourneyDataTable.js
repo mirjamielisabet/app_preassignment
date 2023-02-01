@@ -1,28 +1,39 @@
 import * as React from "react";
 import "../App.css";
 import PropTypes from "prop-types";
-import Box from "@mui/material/Box";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
-import { Button, Divider, TextField } from "@mui/material";
+import {
+  Button,
+  Divider,
+  TextField,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TableSortLabel,
+  Toolbar,
+  Typography,
+  Paper,
+  IconButton,
+  Tooltip,
+  FormControlLabel,
+  Switch,
+  Stack,
+} from "@mui/material";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import Stack from "@mui/material/Stack";
 
+/**
+ * Compares the rows by the value of the given column (orderBy).
+ * @param {Object} a - Row to be compared
+ * @param {Object} b - Row to be compared
+ * @param {string} orderBy - The column by which the table will be sorted
+ * @returns a comparator value
+ */
 const descendingComparator = (a, b, orderBy) => {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -33,12 +44,25 @@ const descendingComparator = (a, b, orderBy) => {
   return 0;
 };
 
+/**
+ * Creates the comparator function according to the sort order.
+ * @param {string} order - The order of the sorting (desc or asc)
+ * @param {string} orderBy - The column by which the table will be sorted
+ * @returns the comparator function
+ */
 const getComparator = (order, orderBy) => {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 };
 
+/**
+ * Sorts the table rows.
+ * Stable sort brings stability to non-modern browsers.
+ * @param {Array} array - The rows to be sorted
+ * @param {Function} comparator - The comparator function
+ * @returns sorted rows
+ */
 const stableSort = (array, comparator) => {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -51,6 +75,9 @@ const stableSort = (array, comparator) => {
   return stabilizedThis.map((el) => el[0]);
 };
 
+/**
+ * Properties for the headcells of the data table.
+ */
 const headCells = [
   {
     id: "departureTime",
@@ -90,6 +117,14 @@ const headCells = [
   },
 ];
 
+/**
+ * The table head of the journey data table.
+ * @param {Object} props
+ * @param {string} props.order - The order of the sorting (desc or asc)
+ * @param {string} props.orderBy - The column by which the table will be sorted
+ * @param {Function} props.onRequestSort - Function for handling the sort request
+ * @returns The table head component of the journey data table
+ */
 const EnhancedTableHead = (props) => {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
@@ -128,18 +163,36 @@ const EnhancedTableHead = (props) => {
   );
 };
 
+/**
+ * Validation for the Enhanced table head's props.
+ */
 EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
 };
 
+/**
+ * The toolbar of the journey data table.
+ * @param {Object} props
+ * @param {boolean} props.showFilterOptions - Tells if the filtering options are visible or not
+ * @param {Function} props.handleFilterClick - Function for handling the filter icon click
+ * @param {Function} props.handleChangeFilter - Function for handling the change of a filter value
+ * @param {Function} props.setPage - Function for setting the page number
+ * @returns The toolbar component of the journey data table
+ */
 const EnhancedTableToolbar = (props) => {
   const [text, setText] = React.useState({
     departureStation: "",
     returnStation: "",
   });
 
+  /**
+   * Handles the change in a search field and saves the input value to the state.
+   * The input value is passed on to the handleChangeFilter function.
+   * Sets the page to be the first page.
+   * @param {Object} event
+   */
   const handleChange = (event) => {
     const value = event.target.value;
     const name = event.target.name;
@@ -151,6 +204,11 @@ const EnhancedTableToolbar = (props) => {
     props.setPage(0);
   };
 
+  /**
+   * Clears the content of the search field.
+   * Sets the page to be the first page.
+   * @param {Object} event
+   */
   const clearText = (event) => {
     const name = event.target.name;
     setText({ ...text, [name]: "" });
@@ -158,6 +216,7 @@ const EnhancedTableToolbar = (props) => {
       ...text,
       [name]: "",
     });
+    props.setPage(0);
   };
 
   return (
@@ -273,6 +332,12 @@ const EnhancedTableToolbar = (props) => {
   );
 };
 
+/**
+ * A component containing a table of the city bike journeys.
+ * @param {Object} props
+ * @param {Array} props.data - Information about the city bike journeys
+ * @returns A table containing information about the city bike journeys
+ */
 const JourneyDataTable = (props) => {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("departureTime");
@@ -287,6 +352,11 @@ const JourneyDataTable = (props) => {
 
   const rows = props.data;
 
+  /**
+   * Formats the date and time to be more readable.
+   * @param {string} dateString - A date and time formatted as a string
+   * @returns the reformatted date string
+   */
   const formatDate = (dateString) => {
     let date = new Date(dateString);
     let dt = date.getDate();
@@ -299,35 +369,68 @@ const JourneyDataTable = (props) => {
     return newDateString;
   };
 
+  /**
+   * Handles the sort request.
+   * @param {Object} event
+   * @param {string} property - the property (column) by which the table is sorted
+   */
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
+  /**
+   * Handles the page change.
+   * @param {Object} event
+   * @param {number} newPage - the number of the new page
+   */
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
+  /**
+   * Handles the change of rows per page.
+   * Sets the page to be the first page.
+   * @param {Object} event
+   */
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  /**
+   * Handles the request of changing the table density.
+   * @param {Object} event
+   */
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
 
+  /**
+   * Handles the click of the filter icon.
+   * Shows or hides the filter options.
+   */
   const handleFilterClick = () => {
     showFilterOptions
       ? setShowFilterOptions(false)
       : setShowFilterOptions(true);
   };
 
+  /**
+   * Handles the change of the filtering value.
+   * Saves the new filter value to the state.
+   * @param {Object} value - The filter value
+   */
   const handleChangeFilter = (value) => {
     setFilter(value);
   };
 
+  /**
+   * Filters the rows by the input of the search fields.
+   * @param {Array} rows - The rows to be filtered
+   * @returns filtered rows
+   */
   const filterBy = (rows) => {
     if (filter.departureStation === "" && filter.returnStation === "") {
       return rows;
@@ -358,14 +461,16 @@ const JourneyDataTable = (props) => {
     }
   };
 
-  // Avoid a layout jump when reaching the last page with empty rows.
+  /**
+   * Avoid a layout jump when reaching the last page with empty rows.
+   */
   const emptyRows =
     page > 0
       ? Math.max(0, (1 + page) * rowsPerPage - filterBy(rows).length)
       : 0;
 
   return (
-    <Box className="dataTable">
+    <Box>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar
           showFilterOptions={showFilterOptions}
