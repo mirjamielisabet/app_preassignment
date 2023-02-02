@@ -36,7 +36,7 @@ const StationComponent = () => {
     let tempArr = [];
 
     axios
-      .get("http://localhost:8080/stations")
+      .get("/stations")
       .then((result) => {
         for (let i = 0; i < result.data.length; i++) {
           tempArr.push({
@@ -61,7 +61,7 @@ const StationComponent = () => {
   const getStationData = (id) => {
     setLoading(true);
     axios
-      .get(`http://localhost:8080/stations/${id}`)
+      .get(`/stations/${id}`)
       .then((result) => {
         setStationData({
           stationName: result.data[0].name,
@@ -83,7 +83,7 @@ const StationComponent = () => {
    */
   const getStartJourneys = (id) => {
     axios
-      .get(`http://localhost:8080/journey_data/start/${id}`)
+      .get(`/journey_data/start/${id}`)
       .then((result) => {
         setStartJourneyCount(result.data[0].startCount);
       })
@@ -99,7 +99,7 @@ const StationComponent = () => {
    */
   const getEndJourneys = (id) => {
     axios
-      .get(`http://localhost:8080/journey_data/end/${id}`)
+      .get(`/journey_data/end/${id}`)
       .then((result) => {
         setEndJourneyCount(result.data[0].endCount);
       })

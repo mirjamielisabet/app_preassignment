@@ -39,7 +39,7 @@ const JourneyComponent = () => {
     let tempArr = [];
 
     axios
-      .get("http://localhost:8080/journey_data")
+      .get("/journey_data")
       .then((result) => {
         for (let i = 0; i < result.data.length; i++) {
           tempArr.push({
