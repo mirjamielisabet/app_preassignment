@@ -27,6 +27,12 @@ This app has been created as a pre-assignment.
 
 ## How to use
 
+The Application is deployed on Render. [Click here to try it](https://city-bike-app.onrender.com/).
+
+***Please note that the data may take some time to load because of the [Render](https://render.com/)'s Free Plan's limits.***
+
+
+
 ## Features not yet implemented / improvement ideas
 
 - Only one of the three available journey datasets were imported to the database. In order to load all three datasets, backend pagination should be implemented
